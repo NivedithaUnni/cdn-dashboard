@@ -1,0 +1,188 @@
+.videos {
+  padding: 20px;
+  color: #c8d3e0;
+}
+
+/* Toolbar */
+.toolbar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.toolbar input,
+.toolbar select {
+  background: #0b1220;
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 8px;
+  color: white;
+  border-radius: 6px;
+}
+
+/* Table */
+.table-card {
+  background: #0b1220;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.08);
+  overflow-x: auto; /* FIX: scroll when needed */
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 800px; /* keeps structure */
+}
+
+/* Header Shine */
+th {
+  background: #101929;
+  padding: 12px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+th::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(0,230,118,0.3), transparent);
+}
+
+th:hover::after {
+  left: 100%;
+  transition: 0.6s;
+}
+
+/* Table Cells */
+td {
+  padding: 12px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+tr:hover {
+  background: #162034;
+}
+
+/* Tag */
+.tag {
+  background: rgba(0,230,118,0.1);
+  color: #00e676;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+/* Status */
+.status {
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.status.active { color: #00e676; }
+.status.paused { color: #ffb300; }
+.status.error { color: #f44336; }
+
+/* Errors */
+.error { color: #f44336; }
+.normal { color: #c8d3e0; }
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  padding: 12px;
+  flex-wrap: wrap;
+}
+
+.pagination button {
+  background: #101929;
+  border: 1px solid rgba(255,255,255,0.1);
+  color: white;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.pagination button:hover {
+  border-color: #00e676;
+  color: #00e676;
+}
+
+.pagination .active {
+  background: #00e676;
+  color: #060b14;
+}
+
+/* ================= MOBILE (≤600px) ================= */
+@media (max-width: 600px) {
+
+  .videos {
+    padding: 12px;
+  }
+
+  .toolbar {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .toolbar input,
+  .toolbar select {
+    width: 100%;
+  }
+
+  th, td {
+    padding: 10px 8px;
+    font-size: 12px;
+  }
+
+  /* Hide less important columns */
+  th:nth-child(4),
+  td:nth-child(4), /* Views */
+
+  th:nth-child(5),
+  td:nth-child(5), /* Bandwidth */
+
+  th:nth-child(6),
+  td:nth-child(6) { /* Errors */
+    display: none;
+  }
+}
+
+/* ================= TABLET (601px - 1024px) ================= */
+@media (max-width: 1024px) {
+
+  .videos {
+    padding: 16px;
+  }
+
+  /* FIX: grid layout for toolbar */
+  .toolbar {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .toolbar input,
+  .toolbar select {
+    width: 100%;
+  }
+
+  th, td {
+    font-size: 13px;
+    padding: 10px;
+  }
+
+  /* 🔥 Hide only 2 columns (clean tablet view) */
+  th:nth-child(5),
+  td:nth-child(5), /* Bandwidth */
+
+  th:nth-child(6),
+  td:nth-child(6) { /* Errors */
+    display: none;
+  }
+}
