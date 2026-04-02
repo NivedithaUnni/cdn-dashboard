@@ -1,12 +1,11 @@
 import mongoose from "mongoose";
 
 const videoSchema = new mongoose.Schema({
-  name: String,
+  videoName: String,
   region: String,
-  country: String,
   views: Number,
   bandwidth: Number,
-  errors: Number,
+  status: String, // Active / Paused / Error
   date: Date
 });
 

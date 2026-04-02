@@ -1,14 +1,24 @@
 import Video from "../models/Video.js";
 
 export const getGeo = async (req, res) => {
-  const data = await Video.aggregate([
-    {
-      $group: {
-        _id: "$country",
-        viewers: { $sum: "$views" }
+  try {
+    const data = await Video.aggregate([
+      {
+        $group: {
+          _id: "$region",
+          count: { $sum: "$views" }
+        }
       }
-    }
-  ]);
+    ]);
 
-  res.json(data);
+    const formatted = data.map(d => ({
+      country: d._id,
+      count: d.count
+    }));
+
+    res.json(formatted);
+
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
