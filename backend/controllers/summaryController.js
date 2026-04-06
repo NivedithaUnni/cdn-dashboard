@@ -5,15 +5,22 @@ export const getSummary = async (req, res) => {
     const videos = await Video.find();
 
     const totalViews = videos.reduce((sum, v) => sum + v.views, 0);
+    const totalErrors = videos.reduce((sum, v) => sum + (v.errors || 0), 0);
     const bandwidth = videos.reduce((sum, v) => sum + v.bandwidth, 0);
 
     const activeStreams = videos.filter(v => v.status === "Active").length;
 
+    //  Calculate error rate
+    const errorRate =
+      totalViews > 0
+        ? ((totalErrors / totalViews) * 100).toFixed(2) + "%"
+        : "0%";
+
     res.json({
       totalViews,
-      bandwidth: bandwidth + " GB",
+      bandwidth: bandwidth.toFixed(2) + " GB",
       activeStreams,
-      errorRate: "2%"
+      errorRate
     });
 
   } catch (error) {

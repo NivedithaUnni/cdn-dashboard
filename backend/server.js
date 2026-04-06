@@ -4,6 +4,8 @@ import cors from "cors";
 
 import connectDB from "./config/db.js";
 import apiRoutes from "./routes/apiRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
+import videoRoutes from "./routes/videoRoutes.js";
 
 dotenv.config();
 
@@ -25,6 +27,8 @@ app.get("/", (req, res) => {
 
 // API routes
 app.use("/api", apiRoutes);
+app.use("/api/auth", authRoutes);
+
 
 /* ================= ERROR HANDLING ================= */
 

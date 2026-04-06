@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   MapContainer,
   TileLayer,
@@ -12,32 +13,41 @@ import {
   Tooltip,
   ResponsiveContainer
 } from "recharts";
+import { getGeo } from "../../services/videoService";
 import "./Geo.css";
 
-// Data
-const DATA = [
-  { country: "USA", viewers: 48320, coords: [37.09, -95.71] },
-  { country: "India", viewers: 31450, coords: [20.59, 78.96] },
-  { country: "Brazil", viewers: 18980, coords: [-14.23, -51.92] },
-  { country: "Germany", viewers: 15680, coords: [51.16, 10.45] },
-  { country: "UK", viewers: 14200, coords: [55.37, -3.43] },
-];
-
 export default function Geo() {
+
+  const [data, setData] = useState([]);
+
+  /* ================= FETCH ================= */
+  useEffect(() => {
+    fetchGeo();
+  }, []);
+
+  const fetchGeo = async () => {
+    try {
+      const res = await getGeo();
+      setData(res.data);
+    } catch (err) {
+      console.error("Geo fetch error:", err);
+    }
+  };
+
   return (
     <div className="geo-page">
       <h2>Geographic Distribution</h2>
 
       <div className="geo-grid">
 
-        {/* 🌍 LEFT - MAP */}
+        {/* 🌍 MAP */}
         <div className="geo-card">
           <h3>Global Viewers Map</h3>
 
           <MapContainer center={[20, 0]} zoom={2} className="map">
             <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" />
 
-            {DATA.map((item, i) => (
+            {data.map((item, i) => (
               <CircleMarker
                 key={i}
                 center={item.coords}
@@ -57,22 +67,22 @@ export default function Geo() {
           </MapContainer>
         </div>
 
-        {/* 📊 RIGHT - BAR CHART */}
+        {/* 📊 BAR CHART */}
         <div className="geo-card">
           <h3>Viewers by Country</h3>
 
           <ResponsiveContainer width="100%" height={250}>
-            <BarChart layout="vertical" data={DATA}>
-  <XAxis type="number" stroke="#94a3b8" />
-  <YAxis
-    dataKey="country"
-    type="category"
-    stroke="#94a3b8"
-    width={100}
-  />
-  <Tooltip />
-  <Bar dataKey="viewers" fill="#22c55e" />
-</BarChart>
+            <BarChart layout="vertical" data={data}>
+              <XAxis type="number" stroke="#94a3b8" />
+              <YAxis
+                dataKey="country"
+                type="category"
+                stroke="#94a3b8"
+                width={100}
+              />
+              <Tooltip />
+              <Bar dataKey="viewers" fill="#22c55e" />
+            </BarChart>
           </ResponsiveContainer>
         </div>
 

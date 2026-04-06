@@ -20,7 +20,7 @@ const generateData = () => {
       views: Math.floor(Math.random() * 5000),
       bandwidth: Math.random() * 100,
       errors: Math.floor(Math.random() * 10),
-      date: new Date(2025, Math.floor(Math.random() * 12), 1)
+      date: new Date(2025,Math.floor(Math.random() * 12),Math.floor(Math.random() * 28) + 1 )
     });
   }
 
