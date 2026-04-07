@@ -4,11 +4,11 @@ import axios from "axios";
    BASE CONFIG
 ============================== */
 const API = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL, // ✅ dynamic
+  baseURL: import.meta.env.VITE_API_BASE_URL, //  dynamic
   headers: {
     "Content-Type": "application/json",
   },
-  withCredentials: true, // ✅ if using cookies (optional)
+  withCredentials: true, // if using cookies (optional)
 });
 
 /* ==============================

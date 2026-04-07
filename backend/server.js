@@ -11,7 +11,7 @@ dotenv.config();
 
 const app = express();
 app.use(cors({
-  origin: "https://your-frontend-domain.com",
+  origin: "https://cdn-dashboard.onrender.com",
   credentials: true
 }));
 
