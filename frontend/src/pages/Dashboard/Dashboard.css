@@ -238,6 +238,7 @@ table + div button.active {
 @media (max-width: 768px) {
   .page {
     padding: 10px;
+    
   }
 
   .cards {
@@ -262,6 +263,7 @@ table + div button.active {
 @media (max-width: 480px) {
   .page h2 {
     font-size: 24px;
+    
   }
 
   .page h3 {
@@ -286,4 +288,8 @@ table + div button.active {
   margin-bottom: 12px;
   object-fit: contain;
   align-self: center;
+}
+
+.page h2 {
+  text-align: center;
 }

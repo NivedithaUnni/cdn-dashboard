@@ -10,9 +10,13 @@ import videoRoutes from "./routes/videoRoutes.js";
 dotenv.config();
 
 const app = express();
+app.use(cors({
+  origin: "https://your-frontend-domain.com",
+  credentials: true
+}));
 
 /* ================= MIDDLEWARE ================= */
-app.use(cors());
+
 app.use(express.json());
 
 /* ================= DATABASE ================= */

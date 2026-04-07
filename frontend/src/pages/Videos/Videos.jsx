@@ -10,7 +10,7 @@ export default function Videos() {
   const [date, setDate] = useState("");
   const [sort, setSort] = useState({ key: "", dir: "" });
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(4);
+  const [limit, setLimit] = useState(7);
   const [totalPages, setTotalPages] = useState(1);
 
   /* ================= FETCH API ================= */

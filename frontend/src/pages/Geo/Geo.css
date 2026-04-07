@@ -1,9 +1,22 @@
+/* ===== PAGE ===== */
+.geo-page {
+  padding: 50px 25px;
+  max-width: 1400px;   /* center layout */
+  margin: 0 auto;
+}
+
+/* ===== HEADING ===== */
+.geo-page h2 {
+  color: white;
+  font-size: 22px;
+  margin-bottom: 30px;
+}
+
 /* ===== GRID ===== */
 .geo-grid {
   display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 16px;
-  margin-bottom: 30px;
+  grid-template-columns: 2.5fr 1.5fr;
+  gap: 20px;
   align-items: stretch;
 }
 
@@ -11,57 +24,48 @@
 .geo-card {
   background: rgba(11, 18, 32, 0.9);
   border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 14px;
-  padding: 14px;
-  width: 100%;
+  border-radius: 16px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
 }
 
-/*  HEADING SPACING FIX */
+/* ===== CARD HEADING ===== */
 .geo-card h3 {
   color: white;
-  font-size: 14px;
-  margin-bottom: 14px; /*  space after heading */
-  padding-bottom: 4px;
-}
-
-.geo-page h2 {
-  color: white;
-  margin-bottom: 25px; /*  increase space after heading */
-}
-
-.geo-page {
-  padding-top: 50px; 
-  padding-bottom: 50px;
-  padding-left: 25px;
+  font-size: 16px;
+  margin-bottom: 16px;
 }
 
 /* ===== MAP ===== */
 .map {
   width: 100%;
-  height: 320px;
-  border-radius: 10px;
+  height: 420px;
+  border-radius: 12px;
 }
 
-/* ===== RECHARTS FIX ===== */
+/* ===== CHART FIX ===== */
 .recharts-wrapper {
   font-size: 12px;
+  flex: 1;
 }
 
-/* ===== TABLET ===== */
+/* ================= TABLET ================= */
 @media (max-width: 1024px) {
   .geo-grid {
     grid-template-columns: 1fr;
   }
 
   .map {
-    height: 280px;
+    height: 300px;
   }
 }
 
-/* ===== MOBILE ===== */
+/* ================= MOBILE ================= */
 @media (max-width: 600px) {
+  .geo-page {
+    padding: 30px 15px;
+  }
 
   .geo-grid {
     display: flex;
@@ -70,32 +74,30 @@
   }
 
   .geo-card {
-    padding: 12px;
+    padding: 14px;
   }
 
   .geo-card h3 {
-    margin-bottom: 12px; /* slightly smaller for mobile */
+    font-size: 14px;
+    margin-bottom: 12px;
   }
 
   .map {
     height: 240px;
   }
 
-  /* Fix chart overflow */
   .recharts-responsive-container {
     width: 100% !important;
     height: 220px !important;
   }
 
-  /* Fix X-axis label overlap */
   .recharts-cartesian-axis-tick text {
     font-size: 10px;
   }
 }
 
-/* ===== EXTRA SMALL ===== */
+/* ================= EXTRA SMALL ================= */
 @media (max-width: 400px) {
-
   .map {
     height: 200px;
   }
@@ -103,4 +105,39 @@
   .recharts-responsive-container {
     height: 200px !important;
   }
+}
+
+/* ================= LARGE DESKTOP ================= */
+@media (min-width: 1400px) {
+  .geo-page {
+    max-width: 1600px;
+  }
+
+  .geo-grid {
+    grid-template-columns: 3fr 1.5fr;
+    gap: 24px;
+  }
+
+  .map {
+    height: 480px;
+  }
+
+  .recharts-responsive-container {
+    height: 300px !important;
+  }
+}
+
+/* ================= ULTRA-WIDE ================= */
+@media (min-width: 1800px) {
+  .geo-page {
+    max-width: 1800px;
+  }
+
+  .map {
+    height: 520px;
+  }
+}
+
+.geo-page h2 {
+  text-align: center;
 }

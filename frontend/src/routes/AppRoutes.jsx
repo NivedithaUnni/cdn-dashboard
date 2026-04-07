@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Navbar from "../components/layout/Navbar";
+import Footer from "../components/layout/Footer";
 import Login from "../pages/Login";
 import Hero from "../components/layout/Hero";
 import Dashboard from "../pages/Dashboard/Dashboard";
@@ -30,6 +31,8 @@ function MainPage() {
       <section id="geo">
         <Geo />
       </section>
+
+      <Footer /> 
     </>
   );
 }

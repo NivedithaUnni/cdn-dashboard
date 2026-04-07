@@ -17,7 +17,6 @@ import { getGeo } from "../../services/videoService";
 import "./Geo.css";
 
 export default function Geo() {
-
   const [data, setData] = useState([]);
 
   /* ================= FETCH ================= */
@@ -71,17 +70,17 @@ export default function Geo() {
         <div className="geo-card">
           <h3>Viewers by Country</h3>
 
-          <ResponsiveContainer width="100%" height={250}>
+          <ResponsiveContainer width="100%" height="100%">
             <BarChart layout="vertical" data={data}>
               <XAxis type="number" stroke="#94a3b8" />
               <YAxis
                 dataKey="country"
                 type="category"
                 stroke="#94a3b8"
-                width={100}
+                width={110}
               />
               <Tooltip />
-              <Bar dataKey="viewers" fill="#22c55e" />
+              <Bar dataKey="viewers" fill="#22c55e" radius={[6, 6, 6, 6]} />
             </BarChart>
           </ResponsiveContainer>
         </div>

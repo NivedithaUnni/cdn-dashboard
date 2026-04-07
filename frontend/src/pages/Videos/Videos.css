@@ -1,47 +1,64 @@
+/* ===== PAGE WRAPPER ===== */
 .videos {
-  padding: 20px;
+  width: 100%;
+  max-width: 1400px;
+  margin: auto;
+  padding: 20px 40px;
   color: #c8d3e0;
+  box-sizing: border-box;
 }
 
-/* Toolbar */
+/* ===== TITLE ===== */
+.videos h2 {
+  margin-bottom: 16px;
+}
+
+/* ===== TOOLBAR ===== */
 .toolbar {
   display: flex;
-  gap: 10px;
-  margin-bottom: 16px;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
 }
 
 .toolbar input,
 .toolbar select {
   background: #0b1220;
   border: 1px solid rgba(255,255,255,0.1);
-  padding: 8px;
+  padding: 10px 12px;
   color: white;
-  border-radius: 6px;
+  border-radius: 8px;
+  font-size: 14px;
+  min-width: 150px;
 }
 
-/* Table */
+/* ===== TABLE CARD ===== */
 .table-card {
   background: #0b1220;
-  border-radius: 12px;
+  border-radius: 14px;
   border: 1px solid rgba(255,255,255,0.08);
-  overflow-x: auto; /* FIX: scroll when needed */
+  overflow-x: auto;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.3);
 }
 
+/* ===== TABLE ===== */
 table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 800px; /* keeps structure */
+  min-width: 900px;
 }
 
-/* Header Shine */
+/* ===== HEADER ===== */
 th {
   background: #101929;
-  padding: 12px;
+  padding: 14px;
   cursor: pointer;
   position: relative;
-  overflow: hidden;
+  font-size: 14px;
+  text-align: left;
 }
 
+/* Hover shine */
 th::after {
   content: "";
   position: absolute;
@@ -57,45 +74,48 @@ th:hover::after {
   transition: 0.6s;
 }
 
-/* Table Cells */
+/* ===== TABLE CELLS ===== */
 td {
-  padding: 12px;
+  padding: 14px;
   border-top: 1px solid rgba(255,255,255,0.05);
+  font-size: 14px;
 }
 
+/* Row hover */
 tr:hover {
   background: #162034;
 }
 
-/* Tag */
+/* ===== TAG ===== */
 .tag {
   background: rgba(0,230,118,0.1);
   color: #00e676;
-  padding: 4px 8px;
+  padding: 4px 10px;
   border-radius: 6px;
+  font-size: 13px;
 }
 
-/* Status */
-.status {
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-size: 12px;
-}
-
+/* ===== STATUS COLORS ===== */
 .status.active { color: #00e676; }
 .status.paused { color: #ffb300; }
 .status.error { color: #f44336; }
 
-/* Errors */
-.error { color: #f44336; }
-.normal { color: #c8d3e0; }
+/* ===== ERRORS ===== */
+.error {
+  color: #f44336;
+  font-weight: 500;
+}
 
-/* Pagination */
+.normal {
+  color: #c8d3e0;
+}
+
+/* ===== PAGINATION ===== */
 .pagination {
   display: flex;
   justify-content: center;
-  gap: 6px;
-  padding: 12px;
+  gap: 8px;
+  padding: 16px;
   flex-wrap: wrap;
 }
 
@@ -103,9 +123,10 @@ tr:hover {
   background: #101929;
   border: 1px solid rgba(255,255,255,0.1);
   color: white;
-  padding: 6px 10px;
+  padding: 6px 12px;
   border-radius: 6px;
   cursor: pointer;
+  transition: 0.3s;
 }
 
 .pagination button:hover {
@@ -118,16 +139,39 @@ tr:hover {
   color: #060b14;
 }
 
-/* ================= MOBILE (≤600px) ================= */
-@media (max-width: 600px) {
+/* ================= TABLET ================= */
+@media (max-width: 1024px) {
+  .videos {
+    padding: 20px;
+  }
 
+  .toolbar {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  th, td {
+    font-size: 13px;
+    padding: 12px;
+  }
+
+  /* Hide bandwidth + errors */
+  th:nth-child(5),
+  td:nth-child(5),
+  th:nth-child(6),
+  td:nth-child(6) {
+    display: none;
+  }
+}
+
+/* ================= MOBILE ================= */
+@media (max-width: 600px) {
   .videos {
     padding: 12px;
   }
 
   .toolbar {
     flex-direction: column;
-    gap: 8px;
   }
 
   .toolbar input,
@@ -136,53 +180,21 @@ tr:hover {
   }
 
   th, td {
-    padding: 10px 8px;
     font-size: 12px;
+    padding: 10px;
   }
 
-  /* Hide less important columns */
+  /* Hide more columns */
   th:nth-child(4),
-  td:nth-child(4), /* Views */
-
+  td:nth-child(4),
   th:nth-child(5),
-  td:nth-child(5), /* Bandwidth */
-
+  td:nth-child(5),
   th:nth-child(6),
-  td:nth-child(6) { /* Errors */
+  td:nth-child(6) {
     display: none;
   }
 }
 
-/* ================= TABLET (601px - 1024px) ================= */
-@media (max-width: 1024px) {
-
-  .videos {
-    padding: 16px;
-  }
-
-  /* FIX: grid layout for toolbar */
-  .toolbar {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-  }
-
-  .toolbar input,
-  .toolbar select {
-    width: 100%;
-  }
-
-  th, td {
-    font-size: 13px;
-    padding: 10px;
-  }
-
-  /* 🔥 Hide only 2 columns (clean tablet view) */
-  th:nth-child(5),
-  td:nth-child(5), /* Bandwidth */
-
-  th:nth-child(6),
-  td:nth-child(6) { /* Errors */
-    display: none;
-  }
+.videos h2 {
+  text-align: center;
 }

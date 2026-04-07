@@ -4,10 +4,11 @@ import axios from "axios";
    BASE CONFIG
 ============================== */
 const API = axios.create({
-  baseURL: "http://localhost:5000/api", // backend URL
+  baseURL: import.meta.env.VITE_API_BASE_URL, // ✅ dynamic
   headers: {
     "Content-Type": "application/json",
   },
+  withCredentials: true, // ✅ if using cookies (optional)
 });
 
 /* ==============================
@@ -32,11 +33,27 @@ API.interceptors.request.use(
 API.interceptors.response.use(
   (response) => response,
   (error) => {
-    // Handle unauthorized (token expired)
-    if (error.response && error.response.status === 401) {
-      console.error("Unauthorized! Redirecting to login...");
+    if (!error.response) {
+      console.error("Network error or server down");
+      return Promise.reject(error);
+    }
+
+    const status = error.response.status;
+
+    // 🔴 Unauthorized
+    if (status === 401) {
       localStorage.removeItem("token");
       window.location.href = "/login";
+    }
+
+    // 🔴 Forbidden
+    if (status === 403) {
+      console.error("Access denied");
+    }
+
+    // 🔴 Server error
+    if (status >= 500) {
+      console.error("Server error. Try again later.");
     }
 
     return Promise.reject(error);
@@ -50,7 +67,7 @@ API.interceptors.response.use(
 // 🔹 Summary API
 export const getSummary = () => API.get("/summary");
 
-// 🔹 Videos API (pagination, filter, sort)
+// 🔹 Videos API
 export const getVideos = (params) =>
   API.get("/videos", { params });
 
@@ -66,6 +83,6 @@ export const loginUser = (data) =>
   API.post("/auth/login", data);
 
 /* ==============================
-   EXPORT DEFAULT
+   EXPORT
 ============================== */
 export default API;

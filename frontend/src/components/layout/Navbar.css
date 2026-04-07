@@ -1,0 +1,176 @@
+/* ===== NAVBAR CONTAINER ===== */
+/* Default navbar */
+.navbar {
+  width: 100%;
+  height: 60px;
+
+  background: #0b1220;
+  color: #fff;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 0 30px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  transition: all 0.4s ease;
+}
+
+/* 🔥 Transparent on scroll */
+.navbar.transparent {
+  background: transparent !important;  /* 🔥 fully transparent */
+  backdrop-filter: none;              /* remove blur */
+  box-shadow: none;                   /* remove shadow */
+}
+
+/* ===== LOGO ===== */
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-img {
+  width: 35px;
+  height: 35px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+/* ===== NAV LINKS (DESKTOP) ===== */
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.nav-links span {
+  cursor: pointer;
+  font-size: 15px;
+  color: #cbd5e1;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+/* Hover */
+.nav-links span:hover {
+  color: #159431;
+}
+
+/* Underline */
+.nav-links span::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -5px;
+  width: 0%;
+  height: 2px;
+  background: #079642;
+  transition: width 0.3s ease;
+}
+
+.nav-links span:hover::after {
+  width: 100%;
+}
+
+/* ===== LOGOUT BUTTON ===== */
+.logout-btn {
+  margin-left: 10px;
+  padding: 6px 14px;
+  background: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.logout-btn:hover {
+  background: #dc2626;
+  transform: scale(1.05);
+}
+
+/* ===== HAMBURGER ICON ===== */
+.menu-icon {
+  display: none;
+  font-size: 26px;
+  cursor: pointer;
+}
+
+/* ===== MOBILE MENU ===== */
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 70%;
+  height: 100vh;
+  background: #0b1220;
+
+  display: flex;
+  flex-direction: column;
+  padding: 30px;
+  gap: 20px;
+
+  transition: 0.3s ease;
+  z-index: 2000;
+}
+
+/* Show menu */
+.mobile-menu.active {
+  right: 0;
+}
+
+/* Close button */
+.close-btn {
+  font-size: 22px;
+  cursor: pointer;
+  align-self: flex-end;
+  margin-bottom: 20px;
+}
+
+/* Mobile links */
+.mobile-menu span {
+  font-size: 18px;
+  color: #cbd5e1;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.mobile-menu span:hover {
+  color: #3b82f6;
+}
+
+/* ===== RESPONSIVE ===== */
+
+/* Tablet */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0 20px;
+  }
+
+  /* Hide desktop links */
+  .nav-links {
+    display: none;
+  }
+
+  /* Show hamburger */
+  .menu-icon {
+    display: block;
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .logo-img {
+    width: 30px;
+    height: 30px;
+  }
+
+  .mobile-menu {
+    width: 80%;
+  }
+}
