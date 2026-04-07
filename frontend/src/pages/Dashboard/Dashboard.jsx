@@ -8,7 +8,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./Dashboard.css";
 
-import API from "/src/services/api";
+import API from "../../services/api";
 
 // Images
 import d1 from "/src/assets/d1.png";
