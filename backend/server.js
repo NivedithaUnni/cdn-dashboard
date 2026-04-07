@@ -11,7 +11,7 @@ dotenv.config();
 
 const app = express();
 app.use(cors({
-  origin: "https://cdn-dashboard-beta.vercel.app",
+  origin: "https://cdn-dashboard-3zrc.vercel.app",
   credentials: true
 }));
 
