@@ -19,8 +19,12 @@ import d4 from "/src/assets/d4.png";
 const COLORS = ["#22c55e", "#facc15", "#ef4444", "#3b82f6", "#a855f7"];
 
 export default function Dashboard() {
+
+  /* ================= STATE ================= */
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+
+  const [range, setRange] = useState("7d"); // ✅ NEW
 
   const [summary, setSummary] = useState({});
   const [trendData, setTrendData] = useState([]);
@@ -29,9 +33,9 @@ export default function Dashboard() {
   /* ================= FETCH DATA ================= */
   useEffect(() => {
     fetchSummary();
-    fetchTrends();
+    fetchTrends(range); // ✅ pass range
     fetchGeo();
-  }, []);
+  }, [range]);
 
   const fetchSummary = async () => {
     try {
@@ -42,9 +46,9 @@ export default function Dashboard() {
     }
   };
 
-  const fetchTrends = async () => {
+  const fetchTrends = async (selectedRange) => {
     try {
-      const res = await API.get("/trends");
+      const res = await API.get(`/trends?range=${selectedRange}`);
       setTrendData(res.data);
     } catch (err) {
       console.error(err);
@@ -74,7 +78,7 @@ export default function Dashboard() {
     <div className="page">
       <h2>Dashboard Overview</h2>
 
-      {/* DATE FILTER */}
+      {/* ================= DATE FILTER ================= */}
       <div style={{ display: "flex", gap: "10px", margin: "20px 0" }}>
         <DatePicker
           selected={startDate}
@@ -88,7 +92,24 @@ export default function Dashboard() {
         />
       </div>
 
-      {/* ✅ SUMMARY CARDS (FROM BACKEND) */}
+      {/* ================= RANGE TOGGLE ================= */}
+      <div style={{ display: "flex", gap: "10px", marginBottom: "10px" }}>
+        <button
+          className={range === "7d" ? "active-btn" : ""}
+          onClick={() => setRange("7d")}
+        >
+          7 Days
+        </button>
+
+        <button
+          className={range === "30d" ? "active-btn" : ""}
+          onClick={() => setRange("30d")}
+        >
+          30 Days
+        </button>
+      </div>
+
+      {/* ================= SUMMARY CARDS ================= */}
       <div className="cards">
         <Card title="Total Views" value={summary.totalViews || 0} image={d1} />
         <Card title="Bandwidth" value={summary.bandwidth || "0GB"} image={d2} />
@@ -98,7 +119,7 @@ export default function Dashboard() {
 
       <div className="charts-grid">
 
-        {/* ✅ AREA CHART (TREND API) */}
+        {/* ================= AREA CHART ================= */}
         <div className="chart-card">
           <div className="chart-header">
             <h3>Views Analytics</h3>
@@ -128,30 +149,30 @@ export default function Dashboard() {
           </ResponsiveContainer>
         </div>
 
-        {/* ✅ PIE CHART (GEO API) */}
+        {/* ================= PIE CHART ================= */}
         <div className="chart-card">
           <div className="chart-header">
             <h3>Geo Distribution</h3>
           </div>
 
           <ResponsiveContainer width="100%" height={200}>
-  <PieChart>
-    <Pie
-      data={geoData}
-      dataKey="viewers"   // ✅ FIXED
-      nameKey="country"
-      cx="50%"
-      cy="50%"
-      innerRadius={60}
-      outerRadius={90}
-    >
-      {geoData.map((_, index) => (
-        <Cell key={index} fill={COLORS[index % COLORS.length]} />
-      ))}
-    </Pie>
-    <Tooltip />
-  </PieChart>
-</ResponsiveContainer>
+            <PieChart>
+              <Pie
+                data={geoData}
+                dataKey="viewers"
+                nameKey="country"
+                cx="50%"
+                cy="50%"
+                innerRadius={60}
+                outerRadius={90}
+              >
+                {geoData.map((_, index) => (
+                  <Cell key={index} fill={COLORS[index % COLORS.length]} />
+                ))}
+              </Pie>
+              <Tooltip />
+            </PieChart>
+          </ResponsiveContainer>
 
           {/* LEGEND */}
           <div className="pie-legend">

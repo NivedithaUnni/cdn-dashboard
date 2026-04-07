@@ -36,6 +36,13 @@ app.use("/api/auth", authRoutes);
 
 /* ================= ERROR HANDLING ================= */
 
+// 400 handler
+app.use((err, req, res, next) => {
+  if (err.status === 400 || err.name === "ValidationError") {
+    return res.status(400).json({ message: "⚠️ Bad Request", error: err.message });
+  }
+  next(err); // pass to next error handler if not 400
+});
 // 404 handler
 app.use((req, res) => {
   res.status(404).json({ message: "❌ Route not found" });
