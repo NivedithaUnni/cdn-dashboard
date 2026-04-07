@@ -11,7 +11,7 @@ dotenv.config();
 
 const app = express();
 app.use(cors({
-  origin: "https://cdn-dashboard.onrender.com",
+  origin: "https://cdn-dashboard-beta.vercel.app",
   credentials: true
 }));
 
@@ -32,6 +32,7 @@ app.get("/", (req, res) => {
 // API routes
 app.use("/api", apiRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/videos", videoRoutes);
 
 
 /* ================= ERROR HANDLING ================= */
@@ -59,5 +60,5 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 5050;
 
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
 });
