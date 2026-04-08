@@ -101,6 +101,8 @@ export default function Dashboard() {
     <div className="page">
       <h2>Dashboard Overview</h2>
 
+      <div className="top-controls">
+
       {/* ===== DATE PICKERS ===== */}
       <div className="date-filters">
         <DatePicker
@@ -129,6 +131,7 @@ export default function Dashboard() {
         >
           30 Days
         </button>
+      </div>
       </div>
 
       {/* ===== SUMMARY CARDS ===== */}

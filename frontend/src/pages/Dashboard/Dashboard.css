@@ -177,12 +177,7 @@ table + div button.active {
 }
 
 /* ================= DATE PICKER ================= */
-.date-filters {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  margin-bottom: 15px;
-}
+
 
 .react-datepicker-wrapper {
   width: auto;
@@ -203,11 +198,39 @@ table + div button.active {
 }
 
 /* ================= RANGE BUTTONS ================= */
+/* ===== TOP CONTROLS (DESKTOP) ===== */
+.top-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+/* keep items inline */
+.date-filters {
+  display: flex;
+  gap: 10px;
+}
+
 .range-toggle {
   display: flex;
-  justify-content: center;
   gap: 10px;
-  margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+  .top-controls {
+    flex-direction: column;   /* 🔥 stack */
+    align-items: stretch;
+  }
+
+  .date-filters {
+    justify-content: center;
+  }
+
+  .range-toggle {
+    justify-content: center;
+  }
 }
 
 button {

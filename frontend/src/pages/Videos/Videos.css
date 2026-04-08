@@ -40,3 +40,57 @@
     color: #9ca3af;
   }
 }
+
+/* ================= TOOLBAR ================= */
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap; /* allows wrapping on smaller screens */
+}
+
+/* Inputs & Select */
+.toolbar input,
+.toolbar select {
+  background: #0b1220;
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 10px 12px;
+  color: #fff;
+  border-radius: 8px;
+  font-size: 14px;
+  min-width: 150px;
+  outline: none;
+}
+
+/* Focus effect */
+.toolbar input:focus,
+.toolbar select:focus {
+  border-color: #22c55e;
+  box-shadow: 0 0 0 1px #22c55e;
+}
+
+/* Number input smaller */
+.toolbar input[type="number"] {
+  max-width: 80px;
+}
+
+@media (max-width: 768px) {
+  .toolbar {
+    flex-direction: column;   /* stack vertically */
+    align-items: stretch;
+  }
+
+  .toolbar input,
+  .toolbar select {
+    width: 100%;
+  }
+
+  .toolbar input[type="number"] {
+    max-width: 100%;
+  }
+}
+
+.videos h2 {
+  margin-bottom: 20px; 
+}

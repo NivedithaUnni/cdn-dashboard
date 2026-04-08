@@ -258,9 +258,9 @@ th, td {
 
 .dashboard-container {
   padding: 20px;
-  padding-top: 90px;
+  padding-top: 20px;
   background: #0b1220;
-  min-height: 100vh;
+  min-height: 90vh;
 }
 
 .main-content {
