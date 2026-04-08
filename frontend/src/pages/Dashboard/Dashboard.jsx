@@ -43,20 +43,23 @@ export default function Dashboard() {
   };
 
   const fetchTrends = async (selectedRange) => {
-    try {
-      const res = await API.get(`/trends?range=${selectedRange}`);
-      // map API _id → date
-      const mapped = res.data.map(d => ({
-        date: d._id,
-        views: d.views,
-        bandwidth: d.bandwidth,
-        errors: d.errors
-      }));
-      setTrendData(mapped);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  try {
+    const res = await API.get(`/trends?range=${selectedRange}`);
+
+    const mapped = res.data.map(d => ({
+      date: d.date,              //  FIX HERE
+      views: d.views || 0,
+      bandwidth: d.bandwidth || 0,
+      errors: d.errors || 0
+    }));
+
+    console.log("Mapped Trends:", mapped);
+
+    setTrendData(mapped);
+  } catch (err) {
+    console.error(err);
+  }
+};
 
   const fetchGeo = async () => {
     try {

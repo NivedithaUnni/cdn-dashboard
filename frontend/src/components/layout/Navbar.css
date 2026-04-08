@@ -43,6 +43,14 @@
 .logout-btn {
   padding: 6px 12px;
   cursor: pointer;
+  background-color: #ef4444; /* red */
+  color: white;
+  border: none;
+  border-radius: 6px;
+}
+
+.logout-btn:hover {
+  background-color: #dc2626; /* darker red on hover */
 }
 
 /* ===== HAMBURGER ===== */

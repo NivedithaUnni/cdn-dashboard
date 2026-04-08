@@ -3,7 +3,6 @@ import "./Videos.css";
 import { getVideos } from "../../services/videoService";
 
 export default function Videos() {
-  /* ================= STATE ================= */
   const [data, setData] = useState([]);
   const [search, setSearch] = useState("");
   const [region, setRegion] = useState("");
@@ -13,7 +12,6 @@ export default function Videos() {
   const [limit, setLimit] = useState(7);
   const [totalPages, setTotalPages] = useState(1);
 
-  /* ================= FETCH API ================= */
   useEffect(() => {
     fetchVideos();
   }, [page, limit, search, region, date, sort]);
@@ -37,39 +35,29 @@ export default function Videos() {
     }
   };
 
-  /* ================= SORT ================= */
   const handleSort = (key) => {
     let dir = "asc";
     if (sort.key === key && sort.dir === "asc") dir = "desc";
     setSort({ key, dir });
   };
 
-  /* ================= PAGINATION ================= */
   const getPages = () => {
     let pages = [];
-
     let start = Math.max(1, page - 1);
     let end = Math.min(totalPages, page + 1);
 
-    if (page === 1) {
-      end = Math.min(3, totalPages);
-    } else if (page === totalPages) {
-      start = Math.max(totalPages - 2, 1);
-    }
+    if (page === 1) end = Math.min(3, totalPages);
+    else if (page === totalPages) start = Math.max(totalPages - 2, 1);
 
-    for (let i = start; i <= end; i++) {
-      pages.push(i);
-    }
-
+    for (let i = start; i <= end; i++) pages.push(i);
     return pages;
   };
 
-  /* ================= UI ================= */
   return (
     <div className="videos">
       <h2>Video Analytics</h2>
 
-      {/* ================= FILTERS ================= */}
+      {/* FILTERS */}
       <div className="toolbar">
         <input
           placeholder="Search..."
@@ -117,7 +105,7 @@ export default function Videos() {
         />
       </div>
 
-      {/* ================= TABLE ================= */}
+      {/* TABLE */}
       <div className="table-card">
         <table>
           <thead>
@@ -128,7 +116,6 @@ export default function Videos() {
               <th onClick={() => handleSort("views")}>Views</th>
               <th onClick={() => handleSort("bandwidth")}>BW (TB)</th>
               <th onClick={() => handleSort("errors")}>Errors</th>
-              
             </tr>
           </thead>
 
@@ -136,28 +123,35 @@ export default function Videos() {
             {data.length > 0 ? (
               data.map((v) => (
                 <tr key={v._id}>
-                  <td>{v.name}</td>
+                  <td data-label="Video">{v.name}</td>
 
-                  <td>
+                  <td data-label="Region">
                     <span className="tag">{v.region}</span>
                   </td>
 
-                  <td>{new Date(v.date).toLocaleDateString("en-GB")}</td>
-
-                  <td>{v.views?.toLocaleString()}</td>
-
-                  <td>{v.bandwidth}</td>
-
-                  <td className={v.errors > 50 ? "error" : "normal"}>
-                    {v.errors}
+                  <td data-label="Date">
+                    {new Date(v.date).toLocaleDateString("en-GB")}
                   </td>
 
-                  
+                  <td data-label="Views">
+                    {v.views?.toLocaleString()}
+                  </td>
+
+                  <td data-label="Bandwidth">
+                    {v.bandwidth}
+                  </td>
+
+                  <td
+                    data-label="Errors"
+                    className={v.errors > 50 ? "error" : "normal"}
+                  >
+                    {v.errors}
+                  </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="7" style={{ textAlign: "center" }}>
+                <td colSpan="6" style={{ textAlign: "center" }}>
                   No data found
                 </td>
               </tr>
@@ -165,17 +159,12 @@ export default function Videos() {
           </tbody>
         </table>
 
-        {/* ================= PAGINATION ================= */}
+        {/* PAGINATION */}
         <div className="pagination">
-          {/* LEFT */}
-          <button
-            onClick={() => setPage((p) => p - 1)}
-            disabled={page === 1}
-          >
+          <button onClick={() => setPage((p) => p - 1)} disabled={page === 1}>
             ‹
           </button>
 
-          {/* NUMBERS */}
           {getPages().map((p) => (
             <button
               key={p}
@@ -186,7 +175,6 @@ export default function Videos() {
             </button>
           ))}
 
-          {/* RIGHT */}
           <button
             onClick={() => setPage((p) => p + 1)}
             disabled={page === totalPages}
