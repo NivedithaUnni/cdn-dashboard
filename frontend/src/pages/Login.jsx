@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import API from "../services/api";
+import { loginUser } from "../services/api";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -20,16 +20,17 @@ export default function Login() {
 
     try {
       setLoading(true);
+      const res = await loginUser({ email, password });
 
-      const res = await API.post("/auth/login", { email, password });
-
-      // Save token
+      // Save JWT token
       localStorage.setItem("token", res.data.token);
 
-      // Redirect
+      // Redirect to dashboard
       navigate("/home");
     } catch (err) {
-      setError("Invalid email or password");
+      setError(
+        err.response?.data?.message || "Invalid email or password"
+      );
     } finally {
       setLoading(false);
     }
@@ -71,6 +72,7 @@ export default function Login() {
   );
 }
 
+// ================= STYLES =================
 const styles = {
   container: {
     height: "100vh",
@@ -86,17 +88,9 @@ const styles = {
     width: "340px",
     textAlign: "center",
     boxShadow: "0 10px 25px rgba(0,0,0,0.4)",
-    zIndex: 10,
   },
-  title: {
-    color: "#ffffff",
-    marginBottom: "10px",
-  },
-  subtitle: {
-    color: "#9ca3af",
-    fontSize: "14px",
-    marginBottom: "25px",
-  },
+  title: { color: "#ffffff", marginBottom: "10px" },
+  subtitle: { color: "#9ca3af", fontSize: "14px", marginBottom: "25px" },
   input: {
     width: "100%",
     padding: "12px",
@@ -119,9 +113,5 @@ const styles = {
     cursor: "pointer",
     transition: "0.3s",
   },
-  error: {
-    color: "#ef4444",
-    fontSize: "13px",
-    marginBottom: "10px",
-  },
+  error: { color: "#ef4444", fontSize: "13px", marginBottom: "10px" },
 };

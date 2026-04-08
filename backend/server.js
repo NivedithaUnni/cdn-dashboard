@@ -1,3 +1,4 @@
+// server.js
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
@@ -10,18 +11,23 @@ import videoRoutes from "./routes/videoRoutes.js";
 dotenv.config();
 
 const app = express();
-app.use(cors({
-  origin: ["https://cdn-dashboard-3zrc.vercel.app"],
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true
-}));
 
-// ✅ Handle preflight requests
-app.options("*", cors());
+/* ================= CORS SETUP ================= */
+const FRONTEND_URL = "https://cdn-dashboard-3zrc.vercel.app";
+
+const corsOptions = {
+  origin: FRONTEND_URL,          // Only allow your frontend domain
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true              // Required if using cookies / JWT auth
+};
+
+app.use(cors(corsOptions));
+
+// Handle preflight OPTIONS requests
+app.options("*", cors(corsOptions));
 
 /* ================= MIDDLEWARE ================= */
-
 app.use(express.json());
 
 /* ================= DATABASE ================= */
@@ -39,7 +45,6 @@ app.use("/api", apiRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/videos", videoRoutes);
 
-
 /* ================= ERROR HANDLING ================= */
 
 // 400 handler
@@ -47,8 +52,9 @@ app.use((err, req, res, next) => {
   if (err.status === 400 || err.name === "ValidationError") {
     return res.status(400).json({ message: "⚠️ Bad Request", error: err.message });
   }
-  next(err); // pass to next error handler if not 400
+  next(err);
 });
+
 // 404 handler
 app.use((req, res) => {
   res.status(404).json({ message: "❌ Route not found" });
@@ -61,7 +67,6 @@ app.use((err, req, res, next) => {
 });
 
 /* ================= SERVER START ================= */
-
 const PORT = process.env.PORT || 5050;
 
 app.listen(PORT, () => {
