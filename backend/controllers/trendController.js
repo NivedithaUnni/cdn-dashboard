@@ -2,26 +2,44 @@ import Video from "../models/Video.js";
 
 export const getTrends = async (req, res) => {
   try {
-    // Optional query param: range=7d|30d
-    const range = req.query.range;
-    let filter = {};
-    if (range === "7d" || range === "30d") {
-      const days = range === "30d" ? 30 : 7;
-      const startDate = new Date();
-      startDate.setDate(startDate.getDate() - days);
-      filter.date = { $gte: startDate };
-    }
+    //  get range from query
+    const range = req.query.range || "7d";
 
-    const data = await Video.find(filter).sort({ date: 1 });
+    let days = 7;
+    if (range === "30d") days = 30;
 
-    const formatted = data.map(v => ({
-      date: v.date.toISOString().split("T")[0],
-      views: v.views
+    // calculate start date
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - days);
+
+    //aggregate
+    const trends = await Video.aggregate([
+      {
+        $match: {
+          date: { $gte: startDate }
+        }
+      },
+      {
+        $group: {
+          _id: {
+            $dateToString: { format: "%Y-%m-%d", date: "$date" }
+          },
+          views: { $sum: "$views" }
+        }
+      },
+      { $sort: { _id: 1 } }
+    ]);
+
+    //  format response
+    const formatted = trends.map(t => ({
+      date: t._id,
+      views: t.views
     }));
 
     res.json(formatted);
 
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error fetching trends" });
   }
 };

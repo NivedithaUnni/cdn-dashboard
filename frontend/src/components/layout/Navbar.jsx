@@ -7,11 +7,11 @@ export default function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false); // 🔥 new
 
-  // 🔥 Detect scroll
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50); // trigger after scroll
+      setScrolled(window.scrollY > 50);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -24,6 +24,8 @@ export default function Navbar() {
   };
 
   const handleNavigation = (id) => {
+    setMenuOpen(false); // 🔥 close menu on click
+
     if (location.pathname !== "/home") {
       navigate("/home");
       setTimeout(() => {
@@ -36,12 +38,19 @@ export default function Navbar() {
 
   return (
     <nav className={`navbar ${scrolled ? "transparent" : ""}`}>
-       <h2 className="logo-container">
+      
+      <h2 className="logo-container">
         <img src={logo} alt="logo" className="logo-img" />
         CDN
       </h2>
 
-      <div className="nav-links">
+      {/* 🔥 Hamburger */}
+      <div className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
+        ☰
+      </div>
+
+      {/* 🔥 Links */}
+      <div className={`nav-links ${menuOpen ? "active" : ""}`}>
         <span onClick={() => handleNavigation("hero")}>Home</span>
         <span onClick={() => handleNavigation("dashboard")}>Dashboard</span>
         <span onClick={() => handleNavigation("videos")}>Videos</span>

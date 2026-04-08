@@ -7,7 +7,6 @@ import {
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./Dashboard.css";
-
 import API from "../../services/api";
 
 // Images
@@ -19,21 +18,18 @@ import d4 from "/src/assets/d4.png";
 const COLORS = ["#22c55e", "#facc15", "#ef4444", "#3b82f6", "#a855f7"];
 
 export default function Dashboard() {
-
-  /* ================= STATE ================= */
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
 
-  const [range, setRange] = useState("7d"); // ✅ NEW
-
+  const [range, setRange] = useState("7d"); // 7d or 30d
   const [summary, setSummary] = useState({});
   const [trendData, setTrendData] = useState([]);
   const [geoData, setGeoData] = useState([]);
 
-  /* ================= FETCH DATA ================= */
+  /* ================== FETCH DATA ================== */
   useEffect(() => {
     fetchSummary();
-    fetchTrends(range); // ✅ pass range
+    fetchTrends(range);
     fetchGeo();
   }, [range]);
 
@@ -49,7 +45,14 @@ export default function Dashboard() {
   const fetchTrends = async (selectedRange) => {
     try {
       const res = await API.get(`/trends?range=${selectedRange}`);
-      setTrendData(res.data);
+      // map API _id → date
+      const mapped = res.data.map(d => ({
+        date: d._id,
+        views: d.views,
+        bandwidth: d.bandwidth,
+        errors: d.errors
+      }));
+      setTrendData(mapped);
     } catch (err) {
       console.error(err);
     }
@@ -64,43 +67,57 @@ export default function Dashboard() {
     }
   };
 
-  /* ================= DATE FILTER ================= */
+  /* ================== FILL MISSING DATES ================== */
+  const fillMissingDates = (data, days) => {
+    const today = new Date();
+    let result = [];
+    for (let i = days - 1; i >= 0; i--) {
+      const date = new Date(today);
+      date.setDate(today.getDate() - i);
+      const dateStr = date.toISOString().split("T")[0];
+      const existing = data.find(d => d.date === dateStr);
+      result.push(existing || { date: dateStr, views: 0, bandwidth: 0, errors: 0 });
+    }
+    return result;
+  };
+
+  /* ================== DATE FILTER ================== */
   const filteredData = useMemo(() => {
-    return trendData.filter((d) => {
+    const displayedData = fillMissingDates(trendData, range === "30d" ? 30 : 7);
+    return displayedData.filter((d) => {
       const dDate = new Date(d.date);
       if (startDate && dDate < startDate) return false;
       if (endDate && dDate > endDate) return false;
       return true;
     });
-  }, [trendData, startDate, endDate]);
+  }, [trendData, startDate, endDate, range]);
 
   return (
     <div className="page">
       <h2>Dashboard Overview</h2>
 
-      {/* ================= DATE FILTER ================= */}
-      <div style={{ display: "flex", gap: "10px", margin: "20px 0" }}>
+      {/* ===== DATE PICKERS ===== */}
+      <div className="date-filters">
         <DatePicker
           selected={startDate}
-          onChange={(date) => setStartDate(date)}
+          onChange={setStartDate}
           placeholderText="Start Date"
         />
         <DatePicker
           selected={endDate}
-          onChange={(date) => setEndDate(date)}
+          onChange={setEndDate}
           placeholderText="End Date"
         />
       </div>
 
-      {/* ================= RANGE TOGGLE ================= */}
-      <div style={{ display: "flex", gap: "10px", marginBottom: "10px" }}>
+      {/* ===== RANGE TOGGLE ===== */}
+      <div className="range-toggle">
         <button
           className={range === "7d" ? "active-btn" : ""}
           onClick={() => setRange("7d")}
         >
           7 Days
         </button>
-
         <button
           className={range === "30d" ? "active-btn" : ""}
           onClick={() => setRange("30d")}
@@ -109,7 +126,7 @@ export default function Dashboard() {
         </button>
       </div>
 
-      {/* ================= SUMMARY CARDS ================= */}
+      {/* ===== SUMMARY CARDS ===== */}
       <div className="cards">
         <Card title="Total Views" value={summary.totalViews || 0} image={d1} />
         <Card title="Bandwidth" value={summary.bandwidth || "0GB"} image={d2} />
@@ -117,15 +134,15 @@ export default function Dashboard() {
         <Card title="Error Rate" value={summary.errorRate || "0%"} image={d4} />
       </div>
 
+      {/* ===== CHARTS ===== */}
       <div className="charts-grid">
 
-        {/* ================= AREA CHART ================= */}
+        {/* AREA CHART */}
         <div className="chart-card">
           <div className="chart-header">
             <h3>Views Analytics</h3>
             <span className="live-badge">● Live</span>
           </div>
-
           <ResponsiveContainer width="100%" height={240}>
             <AreaChart data={filteredData}>
               <defs>
@@ -134,11 +151,9 @@ export default function Dashboard() {
                   <stop offset="95%" stopColor="#22c55e" stopOpacity={0}/>
                 </linearGradient>
               </defs>
-
               <XAxis dataKey="date" stroke="#94a3b8" />
               <YAxis stroke="#94a3b8" />
               <Tooltip />
-
               <Area
                 type="monotone"
                 dataKey="views"
@@ -149,12 +164,9 @@ export default function Dashboard() {
           </ResponsiveContainer>
         </div>
 
-        {/* ================= PIE CHART ================= */}
+        {/* PIE CHART */}
         <div className="chart-card">
-          <div className="chart-header">
-            <h3>Geo Distribution</h3>
-          </div>
-
+          <div className="chart-header"><h3>Geo Distribution</h3></div>
           <ResponsiveContainer width="100%" height={200}>
             <PieChart>
               <Pie
@@ -174,7 +186,6 @@ export default function Dashboard() {
             </PieChart>
           </ResponsiveContainer>
 
-          {/* LEGEND */}
           <div className="pie-legend">
             {geoData.map((item, i) => (
               <span key={i}>

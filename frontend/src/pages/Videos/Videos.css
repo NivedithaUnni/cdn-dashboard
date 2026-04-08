@@ -198,3 +198,44 @@ tr:hover {
 .videos h2 {
   text-align: center;
 }
+
+/* ===== TOOLBAR BASE ===== */
+.toolbar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap; /* 🔥 allows wrapping */
+}
+
+/* Inputs */
+.toolbar input,
+.toolbar select {
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  outline: none;
+  min-width: 140px;
+  flex: 1; /* 🔥 flexible width */
+}
+
+/* Limit input smaller */
+.toolbar input[type="number"] {
+  max-width: 80px;
+}
+
+/* ===== MOBILE VIEW ===== */
+@media (max-width: 768px) {
+  .toolbar {
+    flex-direction: column; /* 🔥 stack vertically */
+    align-items: stretch;
+  }
+
+  .toolbar input,
+  .toolbar select {
+    width: 100%;
+  }
+
+  .toolbar input[type="number"] {
+    max-width: 100%; /* full width on mobile */
+  }
+}
