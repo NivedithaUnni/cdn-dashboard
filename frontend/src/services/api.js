@@ -1,60 +1,60 @@
-import axios from "axios";
+// server.js
+import express from "express";
+import dotenv from "dotenv";
+import cors from "cors";
 
-// Base URL from environment variable
-const API = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL, 
-  headers: {
-    "Content-Type": "application/json",
-  },
-  withCredentials: true, // required if backend uses cookies
+import connectDB from "./config/db.js";
+import apiRoutes from "./routes/apiRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
+import videoRoutes from "./routes/videoRoutes.js";
+
+dotenv.config();
+const app = express();
+
+/* ================= CORS SETUP ================= */
+const FRONTEND_URL = "https://cdn-dashboard-3zrc.vercel.app";
+
+const corsOptions = {
+  origin: FRONTEND_URL,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
+};
+
+// Apply CORS before any routes
+app.use(cors(corsOptions));
+
+// Preflight for all routes
+app.options("*", cors(corsOptions));
+
+/* ================= MIDDLEWARE ================= */
+app.use(express.json());
+
+/* ================= DATABASE ================= */
+connectDB();
+
+/* ================= ROUTES ================= */
+app.get("/", (req, res) => res.send("🚀 CDN Analytics API is running..."));
+app.use("/api", apiRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/videos", videoRoutes);
+
+/* ================= ERROR HANDLING ================= */
+// 400 handler
+app.use((err, req, res, next) => {
+  if (err.status === 400 || err.name === "ValidationError") {
+    return res.status(400).json({ message: "⚠️ Bad Request", error: err.message });
+  }
+  next(err);
+});
+// 404 handler
+app.use((req, res) => res.status(404).json({ message: "❌ Route not found" }));
+// Global error handler
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ message: "❌ Server Error" });
 });
 
-// ================= REQUEST INTERCEPTOR (JWT) =================
-API.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
-
-// ================= RESPONSE INTERCEPTOR (ERROR HANDLING) =================
-API.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (!error.response) {
-      console.error("Network error or server down");
-      return Promise.reject(error);
-    }
-
-    const status = error.response.status;
-
-    if (status === 401) {
-      // Unauthorized → logout
-      localStorage.removeItem("token");
-      window.location.href = "/login";
-    } else if (status === 403) {
-      console.error("Access denied");
-    } else if (status >= 500) {
-      console.error("Server error. Try again later.");
-    }
-
-    return Promise.reject(error);
-  }
-);
-
-// ================= API FUNCTIONS =================
-
-// Auth
-export const loginUser = (data) => API.post("/auth/login", data);
-
-// Dashboard
-export const getSummary = () => API.get("/summary");
-export const getVideos = (params) => API.get("/videos", { params });
-export const getGeo = () => API.get("/geo");
-export const getTrends = (range = "7d") => API.get(`/trends?range=${range}`);
-
-export default API;
+/* ================= SERVER START ================= */
+const PORT = process.env.PORT || 5050;
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
