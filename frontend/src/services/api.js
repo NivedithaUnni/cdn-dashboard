@@ -1,60 +1,89 @@
-// server.js
-import express from "express";
-import dotenv from "dotenv";
-import cors from "cors";
+import axios from "axios";
+console.log("API URL:", import.meta.env.VITE_API_BASE_URL);
 
-import connectDB from "./config/db.js";
-import apiRoutes from "./routes/apiRoutes.js";
-import authRoutes from "./routes/authRoutes.js";
-import videoRoutes from "./routes/videoRoutes.js";
+/* ==============================
+   BASE CONFIG
+============================== */
+const API = axios.create({
+  baseURL: import.meta.env.VITE_API_BASE_URL, //  dynamic
+  headers: {
+    "Content-Type": "application/json",
+  },
+  withCredentials: true, // if using cookies (optional)
+});
 
-dotenv.config();
-const app = express();
+/* ==============================
+   REQUEST INTERCEPTOR (JWT)
+============================== */
+API.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("token");
 
-/* ================= CORS SETUP ================= */
-const FRONTEND_URL = "https://cdn-dashboard-3zrc.vercel.app";
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
 
-const corsOptions = {
-  origin: FRONTEND_URL,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true,
-};
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
-// Apply CORS before any routes
-app.use(cors(corsOptions));
+/* ==============================
+   RESPONSE INTERCEPTOR (ERROR)
+============================== */
+API.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (!error.response) {
+      console.error("Network error or server down");
+      return Promise.reject(error);
+    }
 
-// Preflight for all routes
-app.options("*", cors(corsOptions));
+    const status = error.response.status;
 
-/* ================= MIDDLEWARE ================= */
-app.use(express.json());
+    // 🔴 Unauthorized
+    if (status === 401) {
+      localStorage.removeItem("token");
+      window.location.href = "/login";
+    }
 
-/* ================= DATABASE ================= */
-connectDB();
+    // 🔴 Forbidden
+    if (status === 403) {
+      console.error("Access denied");
+    }
 
-/* ================= ROUTES ================= */
-app.get("/", (req, res) => res.send("🚀 CDN Analytics API is running..."));
-app.use("/api", apiRoutes);
-app.use("/api/auth", authRoutes);
-app.use("/api/videos", videoRoutes);
+    // 🔴 Server error
+    if (status >= 500) {
+      console.error("Server error. Try again later.");
+    }
 
-/* ================= ERROR HANDLING ================= */
-// 400 handler
-app.use((err, req, res, next) => {
-  if (err.status === 400 || err.name === "ValidationError") {
-    return res.status(400).json({ message: "⚠️ Bad Request", error: err.message });
+    return Promise.reject(error);
   }
-  next(err);
-});
-// 404 handler
-app.use((req, res) => res.status(404).json({ message: "❌ Route not found" }));
-// Global error handler
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ message: "❌ Server Error" });
-});
+);
 
-/* ================= SERVER START ================= */
-const PORT = process.env.PORT || 5050;
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+/* ==============================
+   API ENDPOINT FUNCTIONS
+============================== */
+
+// 🔹 Summary API
+export const getSummary = () => API.get("/summary");
+
+// 🔹 Videos API
+export const getVideos = (params) =>
+  API.get("/videos", { params });
+
+// 🔹 Geo API
+export const getGeo = () => API.get("/geo");
+
+// 🔹 Trends API
+export const getTrends = (range = "7d") =>
+  API.get(`/trends?range=${range}`);
+
+// 🔹 Auth API
+export const loginUser = (data) =>
+  API.post("/auth/login", data);
+
+/* ==============================
+   EXPORT
+============================== */
+export default API;
