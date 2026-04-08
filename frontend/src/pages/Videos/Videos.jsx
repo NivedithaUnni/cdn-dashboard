@@ -54,6 +54,9 @@ export default function Videos() {
   };
 
   return (
+
+     <div className="main-content">
+     <div className="dashboard-container">
     <div className="videos">
       <h2>Video Analytics</h2>
 
@@ -183,6 +186,8 @@ export default function Videos() {
           </button>
         </div>
       </div>
+    </div>
+    </div>
     </div>
   );
 }

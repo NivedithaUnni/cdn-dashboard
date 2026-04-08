@@ -256,3 +256,13 @@ th, td {
   }
 }
 
+.dashboard-container {
+  padding: 20px;
+  padding-top: 90px;
+  background: #0b1220;
+  min-height: 100vh;
+}
+
+.main-content {
+  padding-top: 90px;
+}

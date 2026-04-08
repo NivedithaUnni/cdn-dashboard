@@ -96,6 +96,8 @@ export default function Dashboard() {
   }, [trendData, startDate, endDate, range]);
 
   return (
+    <div className="main-content">
+    <div className="dashboard-container">
     <div className="page">
       <h2>Dashboard Overview</h2>
 
@@ -203,6 +205,8 @@ export default function Dashboard() {
         </div>
 
       </div>
+    </div>
+    </div>
     </div>
   );
 }

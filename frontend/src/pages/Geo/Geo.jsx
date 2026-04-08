@@ -34,6 +34,8 @@ export default function Geo() {
   };
 
   return (
+     <div className="main-content">
+    <div className="dashboard-container">
     <div className="geo-page">
       <h2>Geographic Distribution</h2>
 
@@ -86,6 +88,8 @@ export default function Geo() {
         </div>
 
       </div>
+    </div>
+    </div>
     </div>
   );
 }
