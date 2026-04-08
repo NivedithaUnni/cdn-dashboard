@@ -1,64 +1,194 @@
-/* ===== PAGE WRAPPER ===== */
-.videos {
+/* ================= PAGE WRAPPER ================= */
+.page, .videos {
   width: 100%;
   max-width: 1400px;
   margin: auto;
   padding: 20px 40px;
-  color: #c8d3e0;
   box-sizing: border-box;
+  color: #c8d3e0;
 }
 
-/* ===== TITLE ===== */
-.videos h2 {
-  margin-bottom: 16px;
+/* ================= PAGE TITLES ================= */
+.page h2, .videos h2 {
+  text-align: center;
+  font-size: 28px;
+  margin-bottom: 20px;
 }
 
-/* ===== TOOLBAR ===== */
-.toolbar {
+/* ================= CARDS ================= */
+.cards {
   display: flex;
-  gap: 12px;
+  gap: 20px;
   margin-bottom: 20px;
   flex-wrap: wrap;
 }
 
-.toolbar input,
-.toolbar select {
-  background: #0b1220;
-  border: 1px solid rgba(255,255,255,0.1);
-  padding: 10px 12px;
-  color: white;
-  border-radius: 8px;
-  font-size: 14px;
-  min-width: 150px;
+.card {
+  flex: 1;
+  background: #0f172a;
+  padding: 15px 10px;
+  border-radius: 10px;
+  min-width: 180px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-/* ===== TABLE CARD ===== */
+.card h4 {
+  font-size: 14px;
+  color: #9ca3af;
+  margin-bottom: 12px;
+}
+
+.card p {
+  font-size: 22px;
+  font-weight: 600;
+  color: #22c55e;
+}
+
+.card-img {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 12px;
+  object-fit: contain;
+  align-self: center;
+}
+
+/* ================= DATE PICKERS ================= */
+.react-datepicker-wrapper {
+  width: auto;
+}
+
+.react-datepicker__input-container input {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #333;
+  background: #111827;
+  color: #fff;
+  font-size: 14px;
+  width: 150px;
+}
+
+.react-datepicker__input-container input::placeholder {
+  color: #9ca3af;
+}
+
+/* ================= RANGE BUTTONS ================= */
+button {
+  background: transparent;
+  border: 1px solid #334155;
+  color: #94a3b8;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.active-btn {
+  background: #22c55e;
+  color: white;
+  border: none;
+}
+
+/* ================= CHARTS ================= */
+.charts-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.chart-card {
+  background: rgba(11, 18, 32, 0.8);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 20px;
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+  min-height: 280px; /* ensures charts render */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Subtle top glow line */
+.chart-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, #22c55e, transparent);
+}
+
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.chart-header h3 {
+  color: white;
+  font-size: 16px;
+}
+
+.live-badge {
+  color: #22c55e;
+  font-size: 12px;
+  background: rgba(34,197,94,0.1);
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.pie-legend {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 10px;
+  font-size: 12px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  display: inline-block;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+/* ================= VIDEOS TABLE ================= */
 .table-card {
   background: #0b1220;
   border-radius: 14px;
   border: 1px solid rgba(255,255,255,0.08);
   overflow-x: auto;
   box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+  margin-top: 20px;
 }
 
-/* ===== TABLE ===== */
-table {
+.table-card table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 900px;
+  min-width: unset;
 }
 
-/* ===== HEADER ===== */
+th, td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #222;
+  text-align: left;
+  font-size: 14px;
+  color: #e5e7eb;
+}
+
 th {
   background: #101929;
-  padding: 14px;
   cursor: pointer;
   position: relative;
-  font-size: 14px;
-  text-align: left;
 }
 
-/* Hover shine */
 th::after {
   content: "";
   position: absolute;
@@ -74,19 +204,10 @@ th:hover::after {
   transition: 0.6s;
 }
 
-/* ===== TABLE CELLS ===== */
-td {
-  padding: 14px;
-  border-top: 1px solid rgba(255,255,255,0.05);
-  font-size: 14px;
-}
-
-/* Row hover */
 tr:hover {
   background: #162034;
 }
 
-/* ===== TAG ===== */
 .tag {
   background: rgba(0,230,118,0.1);
   color: #00e676;
@@ -95,22 +216,14 @@ tr:hover {
   font-size: 13px;
 }
 
-/* ===== STATUS COLORS ===== */
 .status.active { color: #00e676; }
 .status.paused { color: #ffb300; }
 .status.error { color: #f44336; }
 
-/* ===== ERRORS ===== */
-.error {
-  color: #f44336;
-  font-weight: 500;
-}
+.error { color: #f44336; font-weight: 500; }
+.normal { color: #c8d3e0; }
 
-.normal {
-  color: #c8d3e0;
-}
-
-/* ===== PAGINATION ===== */
+/* Pagination */
 .pagination {
   display: flex;
   justify-content: center;
@@ -139,103 +252,69 @@ tr:hover {
   color: #060b14;
 }
 
-/* ================= TABLET ================= */
-@media (max-width: 1024px) {
-  .videos {
-    padding: 20px;
-  }
-
-  .toolbar {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  th, td {
-    font-size: 13px;
-    padding: 12px;
-  }
-
-  /* Hide bandwidth + errors */
-  th:nth-child(5),
-  td:nth-child(5),
-  th:nth-child(6),
-  td:nth-child(6) {
-    display: none;
-  }
-}
-
-/* ================= MOBILE ================= */
-@media (max-width: 600px) {
-  .videos {
-    padding: 12px;
-  }
-
-  .toolbar {
-    flex-direction: column;
-  }
-
-  .toolbar input,
-  .toolbar select {
-    width: 100%;
-  }
-
-  th, td {
-    font-size: 12px;
-    padding: 10px;
-  }
-
-  /* Hide more columns */
-  th:nth-child(4),
-  td:nth-child(4),
-  th:nth-child(5),
-  td:nth-child(5),
-  th:nth-child(6),
-  td:nth-child(6) {
-    display: none;
-  }
-}
-
-.videos h2 {
-  text-align: center;
-}
-
-/* ===== TOOLBAR BASE ===== */
+/* ================= TOOLBAR ================= */
 .toolbar {
   display: flex;
   gap: 12px;
   margin-bottom: 20px;
-  flex-wrap: wrap; /* 🔥 allows wrapping */
+  flex-wrap: wrap;
 }
 
-/* Inputs */
 .toolbar input,
 .toolbar select {
-  padding: 8px 10px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  outline: none;
-  min-width: 140px;
-  flex: 1; /* 🔥 flexible width */
+  background: #0b1220;
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 10px 12px;
+  color: white;
+  border-radius: 8px;
+  font-size: 14px;
+  min-width: 150px;
 }
 
-/* Limit input smaller */
-.toolbar input[type="number"] {
-  max-width: 80px;
+.toolbar input[type="number"] { max-width: 80px; }
+
+/* ================= RESPONSIVE ================= */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .charts-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .cards { flex-wrap: wrap; }
+
+  th, td { font-size: 13px; padding: 12px; }
+
+  th:nth-child(5),
+  td:nth-child(5),
+  th:nth-child(6),
+  td:nth-child(6) { display: none; }
 }
 
-/* ===== MOBILE VIEW ===== */
+/* Mobile */
 @media (max-width: 768px) {
-  .toolbar {
-    flex-direction: column; /* 🔥 stack vertically */
-    align-items: stretch;
-  }
+  .page, .videos { padding: 10px; }
 
-  .toolbar input,
-  .toolbar select {
-    width: 100%;
-  }
+  .cards { flex-direction: column; gap: 15px; }
+  .card { flex: 1 1 100%; }
 
-  .toolbar input[type="number"] {
-    max-width: 100%; /* full width on mobile */
-  }
+  .charts-grid { grid-template-columns: 1fr; }
+
+  .toolbar { flex-direction: column; align-items: stretch; }
+  .toolbar input, .toolbar select { width: 100%; }
+
+  th, td { font-size: 12px; padding: 10px; }
+}
+
+@media (max-width: 600px) {
+  table { width: 100%; min-width: unset; }
+  .videos h2, .page h2 { font-size: 24px; }
+  .chart-header h3 { font-size: 14px; }
+
+  /* hide extra columns */
+  th:nth-child(4), td:nth-child(4),
+  th:nth-child(5), td:nth-child(5),
+  th:nth-child(6), td:nth-child(6) { display: none; }
+
+  .react-datepicker__input-container input { width: 120px; font-size: 12px; }
 }
