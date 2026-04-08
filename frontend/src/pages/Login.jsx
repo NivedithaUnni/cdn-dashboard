@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../services/api";
+import "./Login.css";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -22,96 +23,61 @@ export default function Login() {
       setLoading(true);
       const res = await loginUser({ email, password });
 
-      // Save JWT token
       localStorage.setItem("token", res.data.token);
-
-      // Redirect to dashboard
       navigate("/home");
     } catch (err) {
-      setError(
-        err.response?.data?.message || "Invalid email or password"
-      );
+      setError(err.response?.data?.message || "Invalid email or password");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div style={styles.container}>
-      <div style={styles.card}>
-        <h2 style={styles.title}>Welcome Back</h2>
-        <p style={styles.subtitle}>Login to your CDN Dashboard</p>
+    <section className="login-container">
+      <div className="login-card">
 
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          style={styles.input}
-        />
+        {/* LEFT SIDE (FORM) */}
+        <div className="login-left">
+          <div className="login-content">
+            <h2>CDN Dashboard</h2>
+            <p className="subtitle">Login to your account</p>
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          style={styles.input}
-        />
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
 
-        {error && <p style={styles.error}>{error}</p>}
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
 
-        <button
-          onClick={handleLogin}
-          style={styles.button}
-          disabled={loading}
-        >
-          {loading ? "Logging in..." : "Login"}
-        </button>
+            {error && <p className="error">{error}</p>}
+
+            <button onClick={handleLogin} disabled={loading}>
+              {loading ? "Logging in..." : "Login"}
+            </button>
+
+            
+          </div>
+        </div>
+
+        {/* RIGHT SIDE (INFO PANEL) */}
+        <div className="login-right">
+          <div className="overlay">
+            <h3>CDN Analytics Platform</h3>
+            <p>
+              Monitor traffic, bandwidth, and performance in real-time.
+              Manage your streaming infrastructure with ease.
+            </p>
+          </div>
+        </div>
+
       </div>
-    </div>
+    </section>
   );
 }
-
-// ================= STYLES =================
-const styles = {
-  container: {
-    height: "100vh",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    background: "linear-gradient(135deg, #0f172a, #1e293b)",
-  },
-  card: {
-    background: "#111827",
-    padding: "40px",
-    borderRadius: "12px",
-    width: "340px",
-    textAlign: "center",
-    boxShadow: "0 10px 25px rgba(0,0,0,0.4)",
-  },
-  title: { color: "#ffffff", marginBottom: "10px" },
-  subtitle: { color: "#9ca3af", fontSize: "14px", marginBottom: "25px" },
-  input: {
-    width: "100%",
-    padding: "12px",
-    marginBottom: "15px",
-    borderRadius: "8px",
-    border: "1px solid #374151",
-    background: "#1f2937",
-    color: "#ffffff",
-    outline: "none",
-    fontSize: "14px",
-  },
-  button: {
-    width: "100%",
-    padding: "12px",
-    borderRadius: "8px",
-    border: "none",
-    background: "#3b82f6",
-    color: "#ffffff",
-    fontWeight: "bold",
-    cursor: "pointer",
-    transition: "0.3s",
-  },
-  error: { color: "#ef4444", fontSize: "13px", marginBottom: "10px" },
-};
