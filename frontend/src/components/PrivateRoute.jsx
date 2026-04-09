@@ -1,11 +1,24 @@
+import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
+import API from "../services/api";
 
 export default function PrivateRoute({ children }) {
-  const token = localStorage.getItem("token");
+  const [isAuth, setIsAuth] = useState(null);
 
-  if (!token) {
-    return <Navigate to="/" replace />;
-  }
+  useEffect(() => {
+    const verify = async () => {
+      try {
+        await API.get("/api/auth/verify");
+        setIsAuth(true);
+      } catch {
+        setIsAuth(false);
+      }
+    };
 
-  return children;
+    verify();
+  }, []);
+
+  if (isAuth === null) return <p>Checking authentication...</p>;
+
+  return isAuth ? children : <Navigate to="/" replace />;
 }

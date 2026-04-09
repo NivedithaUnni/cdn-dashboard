@@ -1,15 +1,10 @@
 import axios from "axios";
-console.log("API URL:", import.meta.env.VITE_API_BASE_URL);
 
-/* ==============================
-   BASE CONFIG
-============================== */
 const API = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL, //  dynamic
+  baseURL: import.meta.env.VITE_API_BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
-  withCredentials: true, // if using cookies (optional)
 });
 
 /* ==============================
@@ -35,29 +30,25 @@ API.interceptors.response.use(
   (response) => response,
   (error) => {
     if (!error.response) {
-      console.error("Network error or server down");
+      console.error("Network error");
       return Promise.reject(error);
     }
 
     const status = error.response.status;
 
-    // 🔴 Unauthorized
-   if (status === 401) {
-  // ❌ Do NOT redirect anywhere
-  console.error("Unauthorized - staying on same page");
+    if (status === 401) {
+      console.error("Unauthorized - redirecting");
 
-  // optional: remove token if invalid
-  localStorage.removeItem("token");
-}
+      localStorage.removeItem("token");
+      window.location.href = "/";
+    }
 
-    // 🔴 Forbidden
     if (status === 403) {
       console.error("Access denied");
     }
 
-    // 🔴 Server error
     if (status >= 500) {
-      console.error("Server error. Try again later.");
+      console.error("Server error");
     }
 
     return Promise.reject(error);
@@ -65,28 +56,20 @@ API.interceptors.response.use(
 );
 
 /* ==============================
-   API ENDPOINT FUNCTIONS
+   API FUNCTIONS
 ============================== */
 
-// 🔹 Summary API
-export const getSummary = () => API.get("/summary");
+export const getSummary = () => API.get("/api/summary");
 
-// 🔹 Videos API
 export const getVideos = (params) =>
-  API.get("/videos", { params });
+  API.get("/api/videos", { params });
 
-// 🔹 Geo API
-export const getGeo = () => API.get("/geo");
+export const getGeo = () => API.get("/api/geo");
 
-// 🔹 Trends API
 export const getTrends = (range = "7d") =>
-  API.get(`/trends?range=${range}`);
+  API.get(`/api/trends?range=${range}`);
 
-// 🔹 Auth API
 export const loginUser = (data) =>
-  API.post("/auth/login", data);
+  API.post("/api/auth/login", data);
 
-/* ==============================
-   EXPORT
-============================== */
 export default API;
