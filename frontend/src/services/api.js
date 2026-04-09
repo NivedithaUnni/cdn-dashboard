@@ -1,36 +1,34 @@
+// src/services/api.js
 import axios from "axios";
-console.log("API URL:", import.meta.env.VITE_API_BASE_URL);
 
-/* ==============================
-   BASE CONFIG
-============================== */
+// ------------------------------
+// Base API Config
+// ------------------------------
 const API = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL, //  dynamic
+  baseURL: import.meta.env.VITE_API_BASE_URL, // e.g., https://cdn-dashboard.onrender.com/api
   headers: {
     "Content-Type": "application/json",
   },
-  withCredentials: true, // if using cookies (optional)
+  withCredentials: true, // if backend uses cookies
 });
 
-/* ==============================
-   REQUEST INTERCEPTOR (JWT)
-============================== */
+// ------------------------------
+// Request Interceptor (attach JWT)
+// ------------------------------
 API.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
-
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-
     return config;
   },
   (error) => Promise.reject(error)
 );
 
-/* ==============================
-   RESPONSE INTERCEPTOR (ERROR)
-============================== */
+// ------------------------------
+// Response Interceptor (handle errors)
+// ------------------------------
 API.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -41,52 +39,25 @@ API.interceptors.response.use(
 
     const status = error.response.status;
 
-    // 🔴 Unauthorized
-   if (status === 401) {
-  // ❌ Do NOT redirect anywhere
-  console.error("Unauthorized - staying on same page");
-
-  // optional: remove token if invalid
-  localStorage.removeItem("token");
-}
-
-    // 🔴 Forbidden
-    if (status === 403) {
-      console.error("Access denied");
+    if (status === 401) {
+      console.error("Unauthorized - removing token");
+      localStorage.removeItem("token");
     }
 
-    // 🔴 Server error
-    if (status >= 500) {
-      console.error("Server error. Try again later.");
-    }
+    if (status === 403) console.error("Access denied");
+    if (status >= 500) console.error("Server error. Try again later.");
 
     return Promise.reject(error);
   }
 );
 
-/* ==============================
-   API ENDPOINT FUNCTIONS
-============================== */
-
-// 🔹 Summary API
+// ------------------------------
+// API Functions
+// ------------------------------
+export const loginUser = (data) => API.post("/auth/login", data);
 export const getSummary = () => API.get("/summary");
-
-// 🔹 Videos API
-export const getVideos = (params) =>
-  API.get("/videos", { params });
-
-// 🔹 Geo API
+export const getVideos = (params) => API.get("/videos", { params });
 export const getGeo = () => API.get("/geo");
+export const getTrends = (range = "7d") => API.get(`/trends?range=${range}`);
 
-// 🔹 Trends API
-export const getTrends = (range = "7d") =>
-  API.get(`/trends?range=${range}`);
-
-// 🔹 Auth API
-export const loginUser = (data) =>
-  API.post("/auth/login", data);
-
-/* ==============================
-   EXPORT
-============================== */
 export default API;
