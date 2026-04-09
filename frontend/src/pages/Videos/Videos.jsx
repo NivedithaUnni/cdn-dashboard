@@ -93,19 +93,31 @@ export default function Videos() {
           }}
         />
 
-        <input
-          type="number"
-          min="1"
-          max="8"
-          value={limit}
-          onChange={(e) => {
-            let value = Number(e.target.value);
-            if (value > 8) value = 8;
-            if (value < 1) value = 1;
-            setLimit(value);
-            setPage(1);
-          }}
-        />
+        <div className="limit-control">
+  <button
+    onClick={() => {
+      if (limit > 1) {
+        setLimit(limit - 1);
+        setPage(1);
+      }
+    }}
+  >
+    −
+  </button>
+
+  <span>{limit}</span>
+
+  <button
+    onClick={() => {
+      if (limit < 8) {
+        setLimit(limit + 1);
+        setPage(1);
+      }
+    }}
+  >
+    +
+  </button>
+</div>
       </div>
 
       {/* TABLE */}

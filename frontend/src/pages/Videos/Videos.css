@@ -94,3 +94,36 @@
 .videos h2 {
   margin-bottom: 20px; 
 }
+
+.limit-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #0b1220;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  padding: 6px 10px;
+}
+
+.limit-control button {
+  background: #101929;
+  border: none;
+  color: #fff;
+  font-size: 18px;
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.limit-control button:hover {
+  background: #22c55e;
+  color: #000;
+}
+
+.limit-control span {
+  min-width: 20px;
+  text-align: center;
+  font-size: 14px;
+}
