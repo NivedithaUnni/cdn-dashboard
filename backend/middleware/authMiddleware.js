@@ -1,30 +1,21 @@
 import jwt from "jsonwebtoken";
-import bcrypt from "bcryptjs";
-import { ADMIN } from "../config/admin.js";
 
-export const login = async (req, res) => {
-  const { email, password } = req.body;
+export const protect = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({ message: "No token provided" });
+  }
 
   try {
-    if (email !== ADMIN.email) {
-      return res.status(401).json({ message: "Invalid credentials" });
-    }
+    const token = authHeader.split(" ")[1];
 
-    const isMatch = await bcrypt.compare(password, ADMIN.password);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    if (!isMatch) {
-      return res.status(401).json({ message: "Invalid credentials" });
-    }
+    req.user = decoded;
+    next();
 
-    const token = jwt.sign(
-      { email: ADMIN.email },
-      process.env.JWT_SECRET,
-      { expiresIn: process.env.JWT_EXPIRES_IN }
-    );
-
-    res.json({ token });
-
-  } catch {
-    res.status(500).json({ message: "Server error" });
+  } catch (err) {
+    return res.status(401).json({ message: "Invalid or expired token" });
   }
 };
