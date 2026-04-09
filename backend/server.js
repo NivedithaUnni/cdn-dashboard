@@ -5,50 +5,28 @@ import cors from "cors";
 import connectDB from "./config/db.js";
 import apiRoutes from "./routes/apiRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
-import videoRoutes from "./routes/videoRoutes.js";
 
 dotenv.config();
 
 const app = express();
-app.use(cors({
-  origin: ["https://cdn-dashboard-3zrc.vercel.app"],
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true
-}));
 
-//  Handle preflight requests
-app.options("*", cors());
-
-/* ================= MIDDLEWARE ================= */
-
-app.use(express.json());
-
-/* ================= DATABASE ================= */
+// Connect DB
 connectDB();
 
-/* ================= ROUTES ================= */
+// Body parser
+app.use(express.json());
 
-// Root route (test)
-app.get("/", (req, res) => {
-  res.send("🚀 CDN Analytics API is running...");
-});
+// Enable CORS for your frontend
+app.use(cors({
+  origin: ["https://cdn-dashboard-3zrc.vercel.app"], // <-- frontend URL
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true, // needed if sending cookies
+}));
 
-// API routes
-app.use("/api", apiRoutes);
+// Routes
 app.use("/api/auth", authRoutes);
-app.use("/api/videos", videoRoutes);
+app.use("/api", apiRoutes);
 
-
-/* ================= ERROR HANDLING ================= */
-
-// 400 handler
-app.use((err, req, res, next) => {
-  if (err.status === 400 || err.name === "ValidationError") {
-    return res.status(400).json({ message: "⚠️ Bad Request", error: err.message });
-  }
-  next(err); // pass to next error handler if not 400
-});
 // 404 handler
 app.use((req, res) => {
   res.status(404).json({ message: "❌ Route not found" });
@@ -60,10 +38,6 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: "❌ Server Error" });
 });
 
-/* ================= SERVER START ================= */
-
-const PORT = process.env.PORT || 5050;
-
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-});
+// Start server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
