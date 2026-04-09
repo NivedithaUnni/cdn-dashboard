@@ -1,6 +1,5 @@
 import axios from "axios";
 
-//  Make sure your VITE_API_BASE_URL does NOT include /api
 const API = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
   headers: {
@@ -31,28 +30,20 @@ API.interceptors.response.use(
   }
 );
 
-/* =======================
-   API ENDPOINT FUNCTIONS
-======================= */
-
-//  Auth
+/* APIs */
 export const loginUser = (data) =>
-  API.post("/auth/login", data); i
+  API.post("/api/auth/login", data);
 
-//  Summary
 export const getSummary = () =>
-  API.get("/summary");
+  API.get("/api/summary");
 
-//  Geo
 export const getGeo = () =>
-  API.get("/geo");
+  API.get("/api/geo");
 
-//  Videos
 export const getVideos = () =>
-  API.get("/videos");
+  API.get("/api/videos");
 
-//  Trends
 export const getTrends = (range = "7d") =>
-  API.get(`/trends?range=${range}`);
+  API.get(`/api/trends?range=${range}`);
 
 export default API;
