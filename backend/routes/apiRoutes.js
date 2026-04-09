@@ -1,16 +1,19 @@
 import express from "express";
+import { protect } from "../middleware/authMiddleware.js";
+
 import { getSummary } from "../controllers/summaryController.js";
 import { getTrends } from "../controllers/trendController.js";
 import { getGeo } from "../controllers/geoController.js";
 import { getVideos } from "../controllers/videoController.js";
-import { protect } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-// 🔐 Protected routes
-router.get("/summary", protect, getSummary);
-router.get("/trends", protect, getTrends);
-router.get("/geo", protect, getGeo);
-router.get("/videos", protect, getVideos);
+//  Apply auth to ALL routes
+router.use(protect);
+
+router.get("/summary", getSummary);
+router.get("/trends", getTrends);
+router.get("/geo", getGeo);
+router.get("/videos", getVideos);
 
 export default router;

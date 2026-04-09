@@ -7,69 +7,43 @@ const API = axios.create({
   },
 });
 
-/* ==============================
-   REQUEST INTERCEPTOR (JWT)
-============================== */
-API.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem("token");
+/*  Attach token */
+API.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
 
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
 
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
+  return config;
+});
 
-/* ==============================
-   RESPONSE INTERCEPTOR (ERROR)
-============================== */
+/*  Handle errors */
 API.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (!error.response) {
-      console.error("Network error");
-      return Promise.reject(error);
-    }
-
-    const status = error.response.status;
-
-    if (status === 401) {
-      console.error("Unauthorized - redirecting");
-
+  (res) => res,
+  (err) => {
+    if (err.response?.status === 401) {
       localStorage.removeItem("token");
       window.location.href = "/";
     }
-
-    if (status === 403) {
-      console.error("Access denied");
-    }
-
-    if (status >= 500) {
-      console.error("Server error");
-    }
-
-    return Promise.reject(error);
+    return Promise.reject(err);
   }
 );
 
-/* ==============================
-   API FUNCTIONS
-============================== */
+/* APIs */
+export const loginUser = (data) =>
+  API.post("/api/auth/login", data);
 
-export const getSummary = () => API.get("/api/summary");
+export const getSummary = () =>
+  API.get("/api/summary");
 
-export const getVideos = (params) =>
-  API.get("/api/videos", { params });
+export const getGeo = () =>
+  API.get("/api/geo");
 
-export const getGeo = () => API.get("/api/geo");
+export const getVideos = () =>
+  API.get("/api/videos");
 
 export const getTrends = (range = "7d") =>
   API.get(`/api/trends?range=${range}`);
-
-export const loginUser = (data) =>
-  API.post("/api/auth/login", data);
 
 export default API;

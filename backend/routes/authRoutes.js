@@ -4,9 +4,10 @@ import { protect } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
+// login
 router.post("/login", login);
 
-//  verify route
+// verify
 router.get("/verify", protect, (req, res) => {
   res.json({ message: "Valid user" });
 });
