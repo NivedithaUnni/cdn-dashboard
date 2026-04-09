@@ -42,14 +42,12 @@ API.interceptors.response.use(
     const status = error.response.status;
 
     // 🔴 Unauthorized
-    if (status === 401) {
-  const currentPath = window.location.pathname;
+   if (status === 401) {
+  // ❌ Do NOT redirect anywhere
+  console.error("Unauthorized - staying on same page");
 
-  // 🚫 Don't redirect if already on login page
-  if (currentPath !== "/login") {
-    localStorage.removeItem("token");
-    window.location.href = "/login";
-  }
+  // optional: remove token if invalid
+  localStorage.removeItem("token");
 }
 
     // 🔴 Forbidden
