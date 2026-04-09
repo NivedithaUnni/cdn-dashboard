@@ -8,7 +8,7 @@ export default function PrivateRoute({ children }) {
   useEffect(() => {
     const verify = async () => {
       try {
-        await API.get("/api/auth/verify");
+        await API.get("/auth/verify");
         setIsAuth(true);
       } catch {
         setIsAuth(false);
