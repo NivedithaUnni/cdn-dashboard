@@ -43,9 +43,14 @@ API.interceptors.response.use(
 
     // 🔴 Unauthorized
     if (status === 401) {
-      localStorage.removeItem("token");
-      window.location.href = "/login";
-    }
+  const currentPath = window.location.pathname;
+
+  // 🚫 Don't redirect if already on login page
+  if (currentPath !== "/login") {
+    localStorage.removeItem("token");
+    window.location.href = "/login";
+  }
+}
 
     // 🔴 Forbidden
     if (status === 403) {
