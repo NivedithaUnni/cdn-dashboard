@@ -30,9 +30,19 @@ connectDB();
 /* ================= ROUTES ================= */
 
 // Root route (test)
+/* ================= ROUTES ================= */
+
+// Root route
 app.get("/", (req, res) => {
   res.send("🚀 CDN Analytics API is running...");
 });
+
+//  FIRST → Public routes (NO token required)
+app.use("/api/auth", authRoutes);
+
+//  THEN → Protected routes
+app.use("/api/videos", videoRoutes);
+app.use("/api", apiRoutes);
 
 // API routes
 app.use("/api", apiRoutes);
