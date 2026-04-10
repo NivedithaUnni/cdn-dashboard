@@ -4,6 +4,7 @@ import { ADMIN } from "../config/admin.js";
 
 export const login = async (req, res) => {
   const { email, password } = req.body;
+  console.log("REQ BODY:", req.body);
 
   try {
     if (email !== ADMIN.email) {
